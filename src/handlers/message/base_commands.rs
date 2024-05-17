@@ -1,7 +1,6 @@
-use teloxide::{Bot, RequestError};
+use teloxide::RequestError;
 use teloxide::payloads::SendMessageSetters;
-use teloxide::prelude::Message;
-use teloxide::requests::Requester;
+use teloxide::prelude::{Bot, Message, Requester};
 use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
 use teloxide::utils::command::BotCommands;
 
@@ -25,7 +24,7 @@ fn make_kb() -> InlineKeyboardMarkup {
 pub async fn base_command_handler(
     bot: Bot,
     msg: Message,
-    cmd: BaseCommand
+    cmd: BaseCommand,
 ) -> Result<(), RequestError> {
     match cmd {
         BaseCommand::Start => {
