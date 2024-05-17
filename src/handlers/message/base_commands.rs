@@ -16,8 +16,9 @@ pub enum BaseCommand {
     Help
 }
 
+// remove this into keyboards for production
 fn make_kb() -> InlineKeyboardMarkup {
-    let kb = vec![vec![InlineKeyboardButton::callback("niggers", "aboba")]];
+    let kb = vec![vec![InlineKeyboardButton::callback("button", "aboba")]];
     InlineKeyboardMarkup::new(kb)
 }
 
