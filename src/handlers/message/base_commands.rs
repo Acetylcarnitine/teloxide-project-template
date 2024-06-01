@@ -1,8 +1,11 @@
+use std::sync::Arc;
+use sqlx::{Pool, Postgres};
 use teloxide::RequestError;
 use teloxide::payloads::SendMessageSetters;
 use teloxide::prelude::{Bot, Message, Requester};
-use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
 use teloxide::utils::command::BotCommands;
+use crate::database::types::user::User;
+use crate::keyboards::base_command_keyboards::start_kb;
 
 #[derive(BotCommands, Clone)]
 #[command(
@@ -16,21 +19,17 @@ pub enum BaseCommand {
     Help
 }
 
-// remove this into keyboards for production
-fn make_kb() -> InlineKeyboardMarkup {
-    let kb = vec![vec![InlineKeyboardButton::callback("button", "aboba")]];
-    InlineKeyboardMarkup::new(kb)
-}
-
 pub async fn base_command_handler(
     bot: Bot,
     msg: Message,
     cmd: BaseCommand,
+    pool: Arc<Pool<Postgres>>
 ) -> Result<(), RequestError> {
     match cmd {
         BaseCommand::Start => {
+            let _ = User::save(msg.from().unwrap().id.0 as i64, pool).await;
             bot.send_message(msg.chat.id, "This is start message")
-                .reply_markup(make_kb())
+                .reply_markup(start_kb())
                 .await?;
         },
         BaseCommand::Help => {

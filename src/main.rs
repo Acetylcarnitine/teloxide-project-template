@@ -5,6 +5,7 @@ mod database;
 
 use std::sync::Arc;
 use dotenv::dotenv;
+use std::env::var;
 use teloxide::prelude::{
     Bot, Dispatcher, dptree, LoggingErrorHandler
 };
@@ -23,7 +24,7 @@ async fn main() -> Result<(), sqlx::Error> {
     // init database pool that we will share with handlers
     let pool = Arc::new(sqlx::postgres::PgPoolOptions::new()
         .max_connections(5)
-        .connect(std::env::var("DATABASE_URL").unwrap().as_str())
+        .connect(var("DATABASE_URL").unwrap().as_str())
         .await?
     );
 
